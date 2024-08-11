@@ -173,6 +173,9 @@ st.subheader("Conversation History")
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
+# Create the chat input widget (with unique key)
+chat_input = st.chat_input(key="chat_input")
+
 # Process the uploaded PDF file if any
 if uploaded_file:
     # Get the PDF content as bytes
@@ -186,8 +189,8 @@ if uploaded_file:
     for page in pdf_reader.pages:
         pdf_text += page.extract_text()
 
-    # Get the user's prompt from the chat input (with unique key)
-    if prompt := st.chat_input(key="chat_input_pdf"):
+    # Get the user's prompt from the chat input (using the same widget)
+    if prompt := chat_input:  # Use the same chat_input widget
         # Add user's prompt to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
@@ -211,8 +214,8 @@ if uploaded_file:
 
 # If no file is uploaded, handle user interaction
 else:
-    # Get the user's prompt from the chat input (with unique key)
-    if prompt := st.chat_input(key="chat_input_no_pdf"):
+    # Get the user's prompt from the chat input (using the same widget)
+    if prompt := chat_input:  # Use the same chat_input widget
         # Add user's prompt to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
@@ -274,7 +277,7 @@ try:
             pdf_text += page.extract_text()
 
         # Get the user's prompt from the chat input (with unique key)
-        if prompt := st.chat_input(key="chat_input_pdf"):
+        if prompt := chat_input:  # Use the same chat_input widget
             # Add user's prompt to chat history
             st.session_state.messages.append({"role": "user", "content": prompt})
             st.chat_message("user").write(prompt)
@@ -296,8 +299,8 @@ try:
                     {"role": "user", "content": prompt, "response": msg}
                 )
     else:
-        # Get the user's prompt from the chat input (with unique key)
-        if prompt := st.chat_input(key="chat_input_no_pdf"):
+        # Get the user's prompt from the chat input (using the same widget)
+        if prompt := chat_input:  # Use the same chat_input widget
             # Add user's prompt to chat history
             st.session_state.messages.append({"role": "user", "content": prompt})
             st.chat_message("user").write(prompt)
