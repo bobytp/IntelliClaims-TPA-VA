@@ -14,6 +14,10 @@ st.set_page_config(
     layout="wide",
 )
 
+# Initialize user profile globally
+if "user_profile" not in st.session_state:
+    st.session_state["user_profile"] = {"preferred_format": "Structured"}
+
 # Define the sidebar content
 with st.sidebar:
     st.subheader("How to use Intelli.Claims powered by Google Gemini")
@@ -74,7 +78,7 @@ with st.sidebar:
 
     # User profile
     st.subheader("User Profile")
-    preferred_format_options = ("Structured", "Bullet Points", "Conversation")  # Define preferred_format_options here
+    preferred_format_options = ("Structured", "Bullet Points", "Conversation")
     preferred_format_index = preferred_format_options.index(
         st.session_state.user_profile.get("preferred_format", preferred_format_options[0])
     )
@@ -107,10 +111,6 @@ if "chat_history" not in st.session_state:
 
 if "claim_status" not in st.session_state:
     st.session_state["claim_status"] = {}
-
-# Initialize user profile
-if "user_profile" not in st.session_state:
-    st.session_state["user_profile"] = {"preferred_format": "Structured"}  # Initialize with default value
 
 # Load user profile from a file (if it exists)
 try:
