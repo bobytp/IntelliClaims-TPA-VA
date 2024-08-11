@@ -7,15 +7,15 @@ import base64
 
 import google.generativeai as genai
 
-st.set_page_config(page_title="IntelliClaims: AI enabled TPA", page_icon="🏥")
+st.set_page_config(page_title="Intelli.Claims: The AI virtual agent for Insurance TPA's", page_icon="🏥")
 
 with st.sidebar:
-    st.subheader("Instructions to use the Gemini AI TPA")
-    st.markdown("""<span ><font size=2>1. Enter your licence key.</font></span>""", unsafe_allow_html=True)
+    st.subheader("How to use Intelli.Claims powered by Google Gemini")
+    st.markdown("""<span ><font size=2>1. Enter your Gemini API Key.</font></span>""", unsafe_allow_html=True)
     st.markdown("""<span ><font size=2>2. To ask questions related to an Insurance claim, Upload the claim and start chatting</font></span>""", unsafe_allow_html=True)
-    st.markdown("""<span ><font size=2>3. To interact with the AI TPA, Remove any uploaded document and start chatting.</font></span>""", unsafe_allow_html=True)
-    google_api_key = st.text_input("Enter your operator Licence key", key="chatbot_api_key", type="password")
-    "[Contact support](https://intelliclaims)"
+    st.markdown("""<span ><font size=2>3. To interact with the TPA Virtual Agent, Remove any uploaded document and start chatting.</font></span>""", unsafe_allow_html=True)
+    google_api_key = st.text_input("Enter your Gemini API Key", key="chatbot_api_key", type="password")
+    "[Get Google Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key)"
     uploaded_file = st.file_uploader("Please select the claim for evaluation", accept_multiple_files=False, type=['pdf'])
     # if uploaded_file:   
     # st.write(uploaded_file) 
@@ -23,12 +23,12 @@ with st.sidebar:
         st.session_state.messages.clear()
 
     st.divider()
-    st.markdown("""<span ><font size=2>Powered by IntelliClaims</font></span>""", unsafe_allow_html=True)
-    "[Visit us](www.inteliclaims)" 
-    "[Email us](info@intelliclaims)"
+    st.markdown("""<span ><font size=2>Intelli.Claims powered by Google Gemini</font></span>""", unsafe_allow_html=True)
+    "[Visit us](www.intelli.claims)" 
+    "[Email us](info@intelli.claims)"
 
-st.header("Welcome to IntelliClaims the AI powered TPA")
-st.caption("A Google Gemini powered Insurance claims fraud detector")
+st.header("Welcome to IntelliClaims the AI powered Virtual Assistent for Insurance TPA")
+st.caption("Google Gemini based solution")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
@@ -49,13 +49,11 @@ if uploaded_file:
     pdf_text = ''
     for page in pdf_reader.pages:
         pdf_text += page.extract_text()
-
     # Display the PDF file
     # st.write(uploaded_file)
-
     if prompt := st.chat_input():
         if not google_api_key:
-            st.info("Please enter your Operator key to continue.")
+            st.info("Please enter a valid Google Gemini API key to continue.")
             st.stop()
         genai.configure(api_key=google_api_key)
         model = genai.GenerativeModel(
@@ -75,7 +73,7 @@ if uploaded_file:
 else:
     if prompt := st.chat_input():
         if not google_api_key:
-            st.info("Please enter your Operator key to continue.")
+            st.info("Please enter a valid Google Gemini API key to continue.")
             st.stop()
         genai.configure(api_key=google_api_key)
         model = genai.GenerativeModel(
