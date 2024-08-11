@@ -259,11 +259,58 @@ with open("user_profile.json", "w") as f:
 # Error handling
 try:
     # Code to generate response and handle claim status (from previous sections)
-    # ... 
     if uploaded_file:
-        # ... (Code to handle uploaded file)
+        # Get the PDF content as bytes
+        pdf_content = uploaded_file.getvalue()
+
+        # Create a PDF reader object
+        pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content))
+
+        # Extract text from all pages
+        pdf_text = ""
+        for page in pdf_reader.pages:
+            pdf_text += page.extract_text()
+
+        # Get the user's prompt from the chat input
+        if prompt := st.chat_input():
+            # Add user's prompt to chat history
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.chat_message("user").write(prompt)
+
+            # Generate a response from the model
+            msg = process_input(prompt, pdf_text)
+
+            # Add assistant's response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": msg})
+            st.chat_message("assistant").write(msg)
+
+            # Extract claim information from the response (example)
+            if "Claim #" in msg:
+                claim_id = msg.split("Claim #")[1].split(":")[0].strip()
+                update_claim_status(
+                    claim_id, "Pending", notes="Claim submitted for review"
+                )
+                st.session_state.chat_history.append(
+                    {"role": "user", "content": prompt, "response": msg}
+                )
     else:
-        # ... (Code to handle user interaction)
+        # Get the user's prompt from the chat input
+        if prompt := st.chat_input():
+            # Add user's prompt to chat history
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.chat_message("user").write(prompt)
+
+            # Generate a response from the model
+            msg = process_input(prompt)
+
+            # Add assistant's response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": msg})
+            st.chat_message("assistant").write(msg)
+
+            # Store chat history for future reference
+            st.session_state.chat_history.append(
+                {"role": "user", "content": prompt, "response": msg}
+            )
 
 except Exception as e:
     st.error(f"An error occurred: {e}")
