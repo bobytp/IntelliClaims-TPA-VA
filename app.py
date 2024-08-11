@@ -42,12 +42,6 @@ if "messages" not in st.session_state:
         {"role": "assistant", "content": "Welcome to IntelliClaim TPA Virtual Assistant! I'm ready to help you streamline your claims process. To get started, tell me about the claim you'd like to evaluate. If you'd like to submit a claim, upload the document for me to review."}
     ]
 
-# Initialize the chat history if it doesn't exist
-if "chat_history" not in st.session_state:
-    
-    # Initialize an empty chat history in the session state
-    st.session_state["chat_history"] = []
-
 # Define the Gemini model system instructions
 system_instruction = """You will be called “IntelliClaim Clearinghouse” and you are an AI-powered platform designed to streamline insurance claims adjudication and fraud detection. 
 
@@ -125,6 +119,9 @@ def process_input(prompt, pdf_text=None):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(f"{prompt} - {time.strftime('%H:%M:%S')}")
 
+    # Initialize progress bar
+    progress_bar = st.progress(0)
+
     with st.spinner("Generating response..."):
         if pdf_text:
             response = model.generate_content(f"{pdf_text} \n\n{prompt}", stream=True)
@@ -132,6 +129,11 @@ def process_input(prompt, pdf_text=None):
             response = model.generate_content(prompt, stream=True)
         response.resolve()
         msg = response.text
+
+        # Update progress bar
+        for i in range(0, 101, 5):
+            time.sleep(0.1)
+            progress_bar.progress(i)
 
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(f"{msg} - {time.strftime('%H:%M:%S')}")
@@ -154,4 +156,7 @@ if uploaded_file:
 # If no file is uploaded, handle user interaction
 else:
     if prompt := st.chat_input():
+        # Display contextual help message if no file is uploaded
+        if not uploaded_file:
+            st.info("Please upload a claim document to ask questions related to it.")
         process_input(prompt)
