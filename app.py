@@ -36,6 +36,16 @@ def search_chat_history(query):
             matches.append(entry)
     return matches
 
+# Function to display the spinner
+def display_spinner(is_spinning):
+    """Displays the spinner animation.
+
+    Args:
+        is_spinning (bool): Whether to display the spinner or not.
+    """
+    if is_spinning:
+        st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json")
+
 
 # Define the sidebar content
 with st.sidebar:
@@ -236,8 +246,16 @@ if uploaded_file:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
+        # Display the spinner
+        is_spinning = True
+        display_spinner(is_spinning)
+
         # Generate a response from the model
         msg = process_input(prompt, pdf_text)
+
+        # Hide the spinner
+        is_spinning = False
+        display_spinner(is_spinning)
 
         # Add assistant's response to chat history
         st.session_state.messages.append({"role": "assistant", "content": msg})
@@ -261,8 +279,16 @@ else:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
+        # Display the spinner
+        is_spinning = True
+        display_spinner(is_spinning)
+
         # Generate a response from the model
         msg = process_input(prompt)
+
+        # Hide the spinner
+        is_spinning = False
+        display_spinner(is_spinning)
 
         # Add assistant's response to chat history
         st.session_state.messages.append({"role": "assistant", "content": msg})
