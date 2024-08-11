@@ -36,17 +36,6 @@ def search_chat_history(query):
             matches.append(entry)
     return matches
 
-# Function to display the spinner
-def display_spinner(is_spinning):
-    """Displays the spinner animation.
-
-    Args:
-        is_spinning (bool): Whether to display the spinner or not.
-    """
-    if is_spinning:
-        st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json")
-
-
 # Define the sidebar content
 with st.sidebar:
     st.subheader("How to use Intelli.Claims powered by Google Gemini")
