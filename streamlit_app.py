@@ -36,7 +36,8 @@ if "messages" not in st.session_state:
     ]
     
 if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = chat_session.history  
+    # Initialize an empty chat history in the session state
+    st.session_state["chat_history"] = []
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
