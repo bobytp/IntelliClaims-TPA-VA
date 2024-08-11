@@ -39,7 +39,7 @@ st.caption("This is a Google Gemini based AI assistant")
 # Initialize the chat history if it doesn't exist
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "assistant", "content": "Welcome to IntelliClaim TPA Virtual Assistant! I'm ready to help you streamline your claims process. To get started, tell me about the claim you'd like to evaluate. If you'd like to submit a claim, upload the document for me to review."}
+        {"role": "assistant", "content": "Hello! How can I assist you today? Please let me know if you have any questions regarding claim processing, fraud detection, or any other inquiries related to insurance claims. I am here to help."}
     ]
 
 # Define the Gemini model system instructions
