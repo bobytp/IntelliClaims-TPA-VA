@@ -74,7 +74,7 @@ with st.sidebar:
 
     # User profile
     st.subheader("User Profile")
-    preferred_format_options = ("Structured", "Bullet Points", "Conversation")
+    preferred_format_options = ("Structured", "Bullet Points", "Conversation")  # Define preferred_format_options here
     preferred_format_index = preferred_format_options.index(
         st.session_state.user_profile.get("preferred_format", preferred_format_options[0])
     )
