@@ -1,3 +1,3 @@
-# IntelliClaim-TPA-VA
+# Intelli.Claims-TPA-VA
 
-A virtual assistant for the Insurance TPA
+An AI virtual assistant for the Insurance TPA powered by Google's Gemini.
