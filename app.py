@@ -118,6 +118,12 @@ def process_input(prompt, pdf_text=None):
     model = genai.GenerativeModel(model_name="gemini-1.5-flash", system_instruction=system_instruction)
 
     st.session_state.messages.append({"role": "user", "content": prompt})
+    
+     with st.container():
+        st.markdown(
+            f"""<span style='font-size: 14px; color: gray; font-style: italic;'>{time.strftime('%Y-%m-%d %H:%M:%S')}</span>""",
+            unsafe_allow_html=True,
+            
     st.chat_message("user").write(f"{prompt} - {datetime.now().strftime('%H:%M:%S')}")
 
     with st.spinner("Generating response..."):
