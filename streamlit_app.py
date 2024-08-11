@@ -36,8 +36,8 @@ with st.sidebar:
     "[Email us](info@intelli.claims)"
 
 # Display the page header
-st.header("Welcome to IntelliClaims the AI powered Virtual Assistent for Insurance TPA")
-st.caption("Google Gemini based solution")
+st.header("Welcome to IntelliClaims the AI powered Virtual Assistant for Insurance TPA")
+st.caption("This is a Google Gemini based AI assistant")
 
 # Initialize the chat history if it doesn't exist
 if "messages" not in st.session_state:
