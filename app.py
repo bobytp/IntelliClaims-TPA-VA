@@ -135,6 +135,12 @@ def process_input(prompt, pdf_text=None):
         msg = response.text
 
     st.session_state.messages.append({"role": "assistant", "content": msg})
+
+with st.container():
+        st.markdown(
+            f"""<span style='font-size: 14px; color: gray; font-style: italic;'>{time.strftime('%Y-%m-%d %H:%M:%S')}</span>""",
+            unsafe_allow_html=True,
+
     st.chat_message("assistant").write(f"{msg} - {datetime.now().strftime('%H:%M:%S')}")
 
 # Display the chat history
