@@ -142,21 +142,16 @@ def process_input(prompt, pdf_text=None):
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
-# Process the uploaded PDF file if any
-if uploaded_file:
-    pdf_content = uploaded_file.getvalue()
-    pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content))
-    pdf_text = ''
-    for page in pdf_reader.pages:
-        pdf_text += page.extract_text()
-
-    if prompt := st.chat_input():
+# Get user input
+if prompt := st.chat_input():
+    # Process the uploaded PDF file if any
+    if uploaded_file:
+        pdf_content = uploaded_file.getvalue()
+        pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content))
+        pdf_text = ''
+        for page in pdf_reader.pages:
+            pdf_text += page.extract_text()
         process_input(prompt, pdf_text)
-
-# If no file is uploaded, handle user interaction
-else:
-    if prompt := st.chat_input():
-        # Display contextual help message if no file is uploaded
-        if not uploaded_file:
-            st.info("Please upload a claim document to ask questions related to it.")
+    # Handle user input without a document
+    else:
         process_input(prompt)
