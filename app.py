@@ -18,6 +18,25 @@ st.set_page_config(
 if "user_profile" not in st.session_state:
     st.session_state["user_profile"] = {"preferred_format": "Structured"}
 
+# Function to search chat history (define outside the sidebar)
+def search_chat_history(query):
+    """Searches the chat history for conversations containing the query.
+
+    Args:
+        query (str): The search query.
+
+    Returns:
+        list: A list of matching chat history entries.
+    """
+    matches = []
+    for entry in st.session_state.chat_history:
+        if query.lower() in entry["content"].lower() or query.lower() in entry[
+            "response"
+        ].lower():
+            matches.append(entry)
+    return matches
+
+
 # Define the sidebar content
 with st.sidebar:
     st.subheader("How to use Intelli.Claims powered by Google Gemini")
@@ -67,7 +86,7 @@ with st.sidebar:
     st.subheader("Search Chat History")
     search_query = st.text_input("Enter your search query")
     if search_query:
-        matches = search_chat_history(search_query)
+        matches = search_chat_history(search_query)  # Now search_chat_history is accessible
         if matches:
             st.subheader("Matching Conversations")
             for entry in matches:
@@ -179,26 +198,6 @@ def display_claim_status():
         st.table(st.session_state.claim_status)
     else:
         st.info("No claim status information available.")
-
-
-# Function to search chat history
-def search_chat_history(query):
-    """Searches the chat history for conversations containing the query.
-
-    Args:
-        query (str): The search query.
-
-    Returns:
-        list: A list of matching chat history entries.
-    """
-    matches = []
-    for entry in st.session_state.chat_history:
-        if query.lower() in entry["content"].lower() or query.lower() in entry[
-            "response"
-        ].lower():
-            matches.append(entry)
-    return matches
-
 
 # Display the chat history
 st.subheader("Conversation History")
