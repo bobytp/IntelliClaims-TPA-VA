@@ -168,15 +168,16 @@ def process_input(prompt, pdf_text=None):
     response_ready = False
     
     # Display progress indicator outside the function
-    with st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json"):
-        time.sleep(1)  # Simulate processing time
-        if pdf_text:
-            response = model.generate_content(f"{pdf_text} \n\n{prompt}", stream=True)
-        else:
-            response = model.generate_content(prompt, stream=True)
-        response.resolve()
-        response_ready = True
-        return response.text
+    st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json")
+    
+    time.sleep(1)  # Simulate processing time
+    if pdf_text:
+        response = model.generate_content(f"{pdf_text} \n\n{prompt}", stream=True)
+    else:
+        response = model.generate_content(prompt, stream=True)
+    response.resolve()
+    response_ready = True
+    return response.text
 
 
 # Function to handle claim status tracking
