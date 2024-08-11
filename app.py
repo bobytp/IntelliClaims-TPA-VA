@@ -36,6 +36,17 @@ def search_chat_history(query):
             matches.append(entry)
     return matches
 
+# Function to display the spinner
+def display_spinner(is_spinning):
+    """Displays the spinner animation.
+
+    Args:
+        is_spinning (bool): Whether to display the spinner or not.
+    """
+    if is_spinning:
+        st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json")
+
+
 # Define the sidebar content
 with st.sidebar:
     st.subheader("How to use Intelli.Claims powered by Google Gemini")
@@ -81,35 +92,7 @@ with st.sidebar:
     "[Visit us](www.intelli.claims)"
     "[Email us](info@intelli.claims)"
 
-    # Search chat history
-    st.subheader("Search Chat History")
-    search_query = st.text_input("Enter your search query")
-    if search_query:
-        matches = search_chat_history(search_query)  # Now search_chat_history is accessible
-        if matches:
-            st.subheader("Matching Conversations")
-            for entry in matches:
-                st.write(f"**User:** {entry['content']}")
-                st.write(f"**Assistant:** {entry['response']}")
-        else:
-            st.info("No matching conversations found.")
 
-    # User profile
-    st.subheader("User Profile")
-    preferred_format_options = ("Structured", "Bullet Points", "Conversation")
-    preferred_format_index = preferred_format_options.index(
-        st.session_state.user_profile.get("preferred_format", preferred_format_options[0])
-    )
-    preferred_format = st.selectbox(
-        "Preferred Response Format",
-        preferred_format_options,
-        index=preferred_format_index,
-    )
-    st.session_state.user_profile["preferred_format"] = preferred_format
-
-    # Save user profile to a file
-    with open("user_profile.json", "w") as f:
-        json.dump(st.session_state.user_profile, f)
 
 # Display the page header
 st.header("Welcome to IntelliClaims the AI powered Virtual Assistant for Insurance TPA")
