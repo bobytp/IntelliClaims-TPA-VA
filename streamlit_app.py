@@ -1,10 +1,6 @@
 import streamlit as st
-import pathlib
-from PIL import Image
 from io import BytesIO
 import PyPDF2
-import base64  
-
 import google.generativeai as genai
 
 # Set up the page configuration
