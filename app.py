@@ -96,6 +96,28 @@ def display_claim_status():
     else:
         st.info("No claim status information available.")
 
+# Initialize session state variables
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [
+        {
+            "role": "assistant",
+            "content": "Welcome to IntelliClaim TPA Virtual Assistant! I'm ready to help you streamline your claims process. To get started, tell me about the claim you'd like to evaluate. If you'd like to submit a claim, upload the document for me to review.",
+        }
+    ]
+
+if "chat_history" not in st.session_state:
+    st.session_state["chat_history"] = []
+
+if "claim_status" not in st.session_state:
+    st.session_state["claim_status"] = {}
+
+# Load user profile from a file (if it exists)
+try:
+    with open("user_profile.json", "r") as f:
+        st.session_state["user_profile"] = json.load(f)
+except FileNotFoundError:
+    pass
+
 # Display the chat history
 st.subheader("Conversation History")
 for msg in st.session_state.messages:
