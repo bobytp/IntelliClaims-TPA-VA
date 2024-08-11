@@ -4,6 +4,8 @@ import PyPDF2
 import google.generativeai as genai
 import json
 import time
+from streamlit_lottie import st_lottie
+from streamlit_lottie import st_lottie_spinner
 
 # Set up the page configuration
 st.set_page_config(
@@ -144,7 +146,7 @@ def process_input(prompt, pdf_text=None):
     )
 
     # Display progress indicator
-    with st.spinner("Generating response..."):
+    with st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json"):
         time.sleep(1)  # Simulate processing time
         if pdf_text:
             response = model.generate_content(f"{pdf_text} \n\n{prompt}", stream=True)
@@ -201,7 +203,12 @@ def search_chat_history(query):
 # Display the chat history
 st.subheader("Conversation History")
 for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
+    with st.container():
+        st.markdown(
+            f"""<span style='font-size: 14px; color: gray; font-style: italic;'>{time.strftime('%Y-%m-%d %H:%M:%S')}</span>""",
+            unsafe_allow_html=True,
+        )
+        st.chat_message(msg["role"]).write(msg["content"])
 
 # Create the chat input widget (with unique key)
 chat_input = st.chat_input(key="chat_input")
