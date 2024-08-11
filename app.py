@@ -36,89 +36,6 @@ def search_chat_history(query):
             matches.append(entry)
     return matches
 
-# Function to display the spinner
-def display_spinner(is_spinning):
-    """Displays the spinner animation.
-
-    Args:
-        is_spinning (bool): Whether to display the spinner or not.
-    """
-    if is_spinning:
-        st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json")
-
-
-# Define the sidebar content
-with st.sidebar:
-    st.subheader("How to use Intelli.Claims powered by Google Gemini")
-    st.markdown(
-        """<span ><font size=2>1. Enter your Gemini API Key.</font></span>""",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """<span ><font size=2>2. To ask questions related to an Insurance claim, Upload the claim and start chatting</font></span>""",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """<span ><font size=2>3. To interact with the TPA Virtual Agent, Remove any uploaded document and start chatting.</font></span>""",
-        unsafe_allow_html=True,
-    )
-
-    # Get the Gemini API key from the user
-    google_api_key = st.text_input(
-        "Enter your Gemini API Key", key="chatbot_api_key", type="password"
-    )
-    "[Get Google Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key)"
-
-    # Allow the user to upload a claim document
-    uploaded_file = st.file_uploader(
-        "Please select the claim for evaluation",
-        accept_multiple_files=False,
-        type=["pdf"],
-    )
-
-    # Button to clear the chat history
-    if st.button("Clear Chat History"):
-        st.session_state.messages.clear()
-        st.session_state.chat_history.clear()  # Clear chat history
-        st.session_state.claim_status = {}  # Clear claim status
-
-    st.divider()
-
-    # Sidebar powered & links section
-    st.markdown(
-        """<span ><font size=2>Intelli.Claims powered by Google Gemini</font></span>""",
-        unsafe_allow_html=True,
-    )
-    "[Visit us](www.intelli.claims)"
-    "[Email us](info@intelli.claims)"
-
-
-
-# Display the page header
-st.header("Welcome to IntelliClaims the AI powered Virtual Assistant for Insurance TPA")
-st.caption("This is a Google Gemini based AI assistant")
-
-# Initialize session state variables
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [
-        {
-            "role": "assistant",
-            "content": "Welcome to IntelliClaim TPA Virtual Assistant! I'm ready to help you streamline your claims process. To get started, tell me about the claim you'd like to evaluate. If you'd like to submit a claim, upload the document for me to review.",
-        }
-    ]
-
-if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = []
-
-if "claim_status" not in st.session_state:
-    st.session_state["claim_status"] = {}
-
-# Load user profile from a file (if it exists)
-try:
-    with open("user_profile.json", "r") as f:
-        st.session_state["user_profile"] = json.load(f)
-except FileNotFoundError:
-    pass
 
 # Function to process user input and generate response
 def process_input(prompt, pdf_text=None):
@@ -191,6 +108,28 @@ for msg in st.session_state.messages:
 
 # Create the chat input widget (with unique key)
 chat_input = st.chat_input(key="chat_input")
+
+# ------------------------------------------------------------
+# Move these sections to the main screen
+# Get the Gemini API key from the user
+google_api_key = st.text_input(
+    "Enter your Gemini API Key", key="chatbot_api_key", type="password"
+)
+"[Get Google Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key)"
+
+# Allow the user to upload a claim document
+uploaded_file = st.file_uploader(
+    "Please select the claim for evaluation",
+    accept_multiple_files=False,
+    type=["pdf"],
+)
+
+# Button to clear the chat history
+if st.button("Clear Chat History"):
+    st.session_state.messages.clear()
+    st.session_state.chat_history.clear()  # Clear chat history
+    st.session_state.claim_status = {}  # Clear claim status
+# ------------------------------------------------------------
 
 # Process the uploaded PDF file if any
 if uploaded_file:
@@ -266,6 +205,46 @@ else:
 
 # Display claim status
 display_claim_status()
+
+# ------------------------------------------------------------
+#  Search Chat History and User Profile
+# ------------------------------------------------------------
+st.subheader("Search Chat History and User Profile")
+options = st.selectbox(
+    "Select Option", ["Search Chat History", "User Profile"]
+)
+
+if options == "Search Chat History":
+    st.subheader("Search Chat History")
+    search_query = st.text_input("Enter your search query")
+    if search_query:
+        matches = search_chat_history(search_query)
+        if matches:
+            st.subheader("Matching Conversations")
+            for entry in matches:
+                st.write(f"**User:** {entry['content']}")
+                st.write(f"**Assistant:** {entry['response']}")
+        else:
+            st.info("No matching conversations found.")
+
+elif options == "User Profile":
+    st.subheader("User Profile")
+    preferred_format_options = ("Structured", "Bullet Points", "Conversation")
+    preferred_format_index = preferred_format_options.index(
+        st.session_state.user_profile.get("preferred_format", preferred_format_options[0])
+    )
+    preferred_format = st.selectbox(
+        "Preferred Response Format",
+        preferred_format_options,
+        index=preferred_format_index,
+    )
+    st.session_state.user_profile["preferred_format"] = preferred_format
+
+    # Save user profile to a file
+    with open("user_profile.json", "w") as f:
+        json.dump(st.session_state.user_profile, f)
+# ------------------------------------------------------------
+
 
 # Error handling
 try:
