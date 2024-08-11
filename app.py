@@ -3,9 +3,10 @@ from io import BytesIO
 import PyPDF2
 import google.generativeai as genai
 import time
+from datetime import datetime
 
 # Set up the page configuration
-st.set_page_config(page_title="Intelli.Claims: The AI virtual agent for Insurance TPA's", page_icon="🏥")
+st.set_page_config(page_title="Intelli.Claims: The AI virtual agent for Insurance TPA's", page_icon=" ")
 
 # Define the sidebar content
 with st.sidebar:
@@ -117,7 +118,7 @@ def process_input(prompt, pdf_text=None):
     model = genai.GenerativeModel(model_name="gemini-1.5-flash", system_instruction=system_instruction)
 
     st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(f"{prompt} - {time.strftime('%H:%M:%S')}")
+    st.chat_message("user").write(f"{prompt} - {datetime.now().strftime('%H:%M:%S')}")
 
     with st.spinner("Generating response..."):
         if pdf_text:
@@ -128,7 +129,7 @@ def process_input(prompt, pdf_text=None):
         msg = response.text
 
     st.session_state.messages.append({"role": "assistant", "content": msg})
-    st.chat_message("assistant").write(f"{msg} - {time.strftime('%H:%M:%S')}")
+    st.chat_message("assistant").write(f"{msg} - {datetime.now().strftime('%H:%M:%S')}")
 
 # Display the chat history
 for msg in st.session_state.messages:
