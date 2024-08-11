@@ -260,6 +260,11 @@ with open("user_profile.json", "w") as f:
 try:
     # Code to generate response and handle claim status (from previous sections)
     # ... 
+    if uploaded_file:
+        # ... (Code to handle uploaded file)
+    else:
+        # ... (Code to handle user interaction)
+
 except Exception as e:
     st.error(f"An error occurred: {e}")
 
