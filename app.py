@@ -167,7 +167,6 @@ def search_chat_history(query):
             matches.append(entry)
     return matches
 
-
 # Display the chat history
 st.subheader("Conversation History")
 for msg in st.session_state.messages:
@@ -258,7 +257,8 @@ with open("user_profile.json", "w") as f:
 
 # Error handling
 try:
-    # ... (code to generate response and handle claim status)
+    # Code to generate response and handle claim status (from previous sections)
+    # ... 
 except Exception as e:
     st.error(f"An error occurred: {e}")
 
