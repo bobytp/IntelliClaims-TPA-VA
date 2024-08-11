@@ -167,6 +167,7 @@ def search_chat_history(query):
             matches.append(entry)
     return matches
 
+
 # Display the chat history
 st.subheader("Conversation History")
 for msg in st.session_state.messages:
