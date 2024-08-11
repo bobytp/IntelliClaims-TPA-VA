@@ -250,10 +250,14 @@ if search_query:
 
 # User profile
 st.subheader("User Profile")
+preferred_format_options = ("Structured", "Bullet Points", "Conversation")
+preferred_format_index = preferred_format_options.index(
+    st.session_state.user_profile.get("preferred_format", preferred_format_options[0])
+)
 preferred_format = st.selectbox(
     "Preferred Response Format",
-    ("Structured", "Bullet Points", "Conversation"),
-    index=st.session_state.user_profile.get("preferred_format", 0),
+    preferred_format_options,
+    index=preferred_format_index,
 )
 st.session_state.user_profile["preferred_format"] = preferred_format
 
