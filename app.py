@@ -110,7 +110,7 @@ if "claim_status" not in st.session_state:
 
 # Initialize user profile
 if "user_profile" not in st.session_state:
-    st.session_state["user_profile"] = {}  # User-specific preferences
+    st.session_state["user_profile"] = {"preferred_format": "Structured"}  # Initialize with default value
 
 # Load user profile from a file (if it exists)
 try:
