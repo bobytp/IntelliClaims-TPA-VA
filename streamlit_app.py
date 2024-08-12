@@ -4,7 +4,7 @@ import PyPDF2
 import google.generativeai as genai
 
 # Set up the page configuration
-st.set_page_config(page_title="Intelli.Claims: The AI virtual agent for Insurance TPA's", page_icon="🏥")
+st.set_page_config(page_title="IntelliClaims: The AI virtual agent for Insurance TPA's", page_icon="🏥")
 
 # Define the sidebar content
 with st.sidebar:
@@ -27,9 +27,9 @@ with st.sidebar:
     st.divider()
 
     # Sidebar powered & links section
-    st.markdown("""<span ><font size=2>Intelli.Claims powered by Google Gemini</font></span>""", unsafe_allow_html=True)
-    "[Visit us](www.intelli.claims)" 
-    "[Email us](info@intelli.claims)"
+    st.markdown("""<span ><font size=2>IntelliClaims powered by Google Gemini</font></span>""", unsafe_allow_html=True)
+    "[Visit us: www.intelli.claims]" 
+    "[Email us: intelliclaims24@gmail.com]"
 
 # Display the page header
 st.header("Welcome to IntelliClaims the AI powered Virtual Assistant for Insurance TPA")
