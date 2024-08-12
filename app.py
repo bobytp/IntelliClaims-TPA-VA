@@ -138,6 +138,14 @@ try:
 except FileNotFoundError:
     pass
 
+# Load Lottie animation from URL
+lottie_animation = st_lottie(
+    url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json",
+    height=100,
+    width=100,
+    key="lottie_animation",  # Use a unique key for the animation
+)
+
 # Function to process user input and generate response
 def process_input(prompt, pdf_text=None):
     """Processes user input and generates a response from the Gemini model.
@@ -168,7 +176,7 @@ def process_input(prompt, pdf_text=None):
     response_ready = False
     
     # Display progress indicator outside the function
-    with st_lottie_spinner(lottie_url="https://assets8.lottiefiles.com/packages/lf20_4g61y05l.json"):
+    with st_lottie_spinner(lottie_animation):
         time.sleep(1)  # Simulate processing time
         if pdf_text:
             response = model.generate_content(f"{pdf_text} \n\n{prompt}", stream=True)
