@@ -80,18 +80,19 @@ for msg in st.session_state.messages:
     timestamp = datetime.now()
     if msg["role"] == "assistant":
         with st.chat_message(msg["role"], avatar="🤖"):
-            # Display timestamp within the chat message block
+            # Display timestamp using st.markdown
             st.markdown(
                 f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
             )
+            # Display message content using st.markdown
             st.markdown(msg["content"]) 
     else:
         with st.chat_message(msg["role"], avatar="🧑‍💼"):
-            # Display timestamp within the chat message block
+            # Display timestamp using st.markdown
             st.markdown(
                 f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
             )
-            st.write(msg["content"])
+            st.write(msg["content"]) 
 
 # Process the uploaded PDF file if any
 if uploaded_file:
