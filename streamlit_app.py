@@ -8,7 +8,7 @@ st.set_page_config(page_title="IntelliClaims: The AI virtual agent for Insurance
 
 # Define the sidebar content
 with st.sidebar:
-    st.subheader("How to use Intelli.Claims powered by Google Gemini")
+    st.subheader("How to use IntelliClaims powered by Google Gemini")
     st.markdown("""<span ><font size=2>1. Enter your Gemini API Key.</font></span>""", unsafe_allow_html=True)
     st.markdown("""<span ><font size=2>2. To ask questions related to an Insurance claim, Upload the claim and start chatting</font></span>""", unsafe_allow_html=True)
     st.markdown("""<span ><font size=2>3. To interact with the TPA Virtual Agent, Remove any uploaded document and start chatting.</font></span>""", unsafe_allow_html=True)
