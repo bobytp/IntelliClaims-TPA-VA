@@ -182,12 +182,6 @@ if uploaded_file:
                 time.sleep(0.02)
                 progress_bar.progress(i)
 
-            # Typing indicator
-            st.text("Thinking...")
-            for i in range(4):
-                time.sleep(0.2)
-                st.text("Thinking" + "." * (i + 1))
-
             # Generate a response from the model
             response = model.generate_content(
                 f"{pdf_text} \n\n{prompt}", stream=True
@@ -294,12 +288,6 @@ else:
             for i in range(101):
                 time.sleep(0.02)
                 progress_bar.progress(i)
-
-            # Typing indicator
-            st.text("Thinking...")
-            for i in range(4):
-                time.sleep(0.2)
-                st.text("Thinking" + "." * (i + 1))
 
             # Generate a response from the model
             response = model.generate_content(
