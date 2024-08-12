@@ -77,19 +77,20 @@ def format_timestamp(timestamp):
 
 # Display the chat history with visual enhancements and timestamps
 for msg in st.session_state.messages:
-    timestamp = datetime.now()  # Get the timestamp here
+    timestamp = datetime.now()
     if msg["role"] == "assistant":
         with st.chat_message(msg["role"], avatar="🤖"):
             st.markdown(
                 f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
             )
-            st.write(msg["content"])
+            # Use st.markdown instead of st.write for the welcome message
+            st.markdown(msg["content"]) 
     else:
         with st.chat_message(msg["role"], avatar="🧑‍💼"):
             st.markdown(
                 f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
             )
-            st.write(msg["content"])
+            st.write(msg["content"]) 
 
 # Process the uploaded PDF file if any
 if uploaded_file:
@@ -121,19 +122,13 @@ if uploaded_file:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user", avatar="🧑‍💼").write(prompt)
 
-        # Visual Cues:  Progress bar and Typing Indicator
+        # Visual Cues:  Progress bar 
         with st.chat_message("assistant", avatar="🤖"):
             # Progress bar
             progress_bar = st.progress(0)
             for i in range(101):
                 time.sleep(0.02)
                 progress_bar.progress(i)
-
-            # Typing indicator
-            st.text("Thinking...")
-            for i in range(4):
-                time.sleep(0.2)
-                st.text("Thinking" + "." * (i + 1))
 
             # Generate a response from the model
             response = model.generate_content(
@@ -167,19 +162,13 @@ else:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user", avatar="🧑‍💼").write(prompt)
 
-        # Visual Cues:  Progress bar and Typing Indicator
+        # Visual Cues:  Progress bar 
         with st.chat_message("assistant", avatar="🤖"):
             # Progress bar
             progress_bar = st.progress(0)
             for i in range(101):
                 time.sleep(0.02)
                 progress_bar.progress(i)
-
-            # Typing indicator
-            st.text("Thinking...")
-            for i in range(4):
-                time.sleep(0.2)
-                st.text("Thinking" + "." * (i + 1))
 
             # Generate a response from the model
             response = model.generate_content(
