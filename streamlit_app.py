@@ -28,8 +28,8 @@ with st.sidebar:
 
     # Sidebar powered & links section
     st.markdown("""<span ><font size=2>IntelliClaims powered by Google Gemini</font></span>""", unsafe_allow_html=True)
-    "[Visit us: www.intelli.claims]" 
-    "[Email us: intelliclaims24@gmail.com]"
+    "Visit us: www.intelli.claims" 
+    "Email us: intelliclaims24@gmail.com"
 
 # Display the page header
 st.header("Welcome to IntelliClaims the AI powered Virtual Assistant for Insurance TPA")
