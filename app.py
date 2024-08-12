@@ -190,7 +190,7 @@ if uploaded_file:
 
             # Generate a response from the model
             response = model.generate_content(
-                f"{pdf_text} \n\n{prompt}", stream=True, temperature=0.2
+                f"{pdf_text} \n\n{prompt}", stream=True
             )
             response.resolve()
             msg = response.text
