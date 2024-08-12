@@ -80,17 +80,18 @@ for msg in st.session_state.messages:
     timestamp = datetime.now()
     if msg["role"] == "assistant":
         with st.chat_message(msg["role"], avatar="🤖"):
+            # Display timestamp within the chat message block
             st.markdown(
                 f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
             )
-            # Use st.markdown instead of st.write for the welcome message
             st.markdown(msg["content"]) 
     else:
         with st.chat_message(msg["role"], avatar="🧑‍💼"):
+            # Display timestamp within the chat message block
             st.markdown(
                 f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
             )
-            st.write(msg["content"]) 
+            st.write(msg["content"])
 
 # Process the uploaded PDF file if any
 if uploaded_file:
@@ -122,20 +123,16 @@ if uploaded_file:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user", avatar="🧑‍💼").write(prompt)
 
-        # Visual Cues:  Progress bar 
+        # Visual Cues:  Futuristic Loading Spinner
         with st.chat_message("assistant", avatar="🤖"):
-            # Progress bar
-            progress_bar = st.progress(0)
-            for i in range(101):
-                time.sleep(0.02)
-                progress_bar.progress(i)
-
-            # Generate a response from the model
-            response = model.generate_content(
-                f"{pdf_text} \n\n{prompt}", stream=True
-            )
-            response.resolve()
-            msg = response.text
+            with st.spinner("Processing..."):
+                time.sleep(1)  # Simulate processing time
+                # Generate a response from the model
+                response = model.generate_content(
+                    f"{pdf_text} \n\n{prompt}", stream=True
+                )
+                response.resolve()
+                msg = response.text
 
             # Add assistant's response to chat history
             st.session_state.messages.append({"role": "assistant", "content": msg})
@@ -162,20 +159,16 @@ else:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user", avatar="🧑‍💼").write(prompt)
 
-        # Visual Cues:  Progress bar 
+        # Visual Cues:  Futuristic Loading Spinner
         with st.chat_message("assistant", avatar="🤖"):
-            # Progress bar
-            progress_bar = st.progress(0)
-            for i in range(101):
-                time.sleep(0.02)
-                progress_bar.progress(i)
-
-            # Generate a response from the model
-            response = model.generate_content(
-                prompt, stream=True
-            )
-            response.resolve()
-            msg = response.text
+            with st.spinner("Processing..."):
+                time.sleep(1)  # Simulate processing time
+                # Generate a response from the model
+                response = model.generate_content(
+                    prompt, stream=True
+                )
+                response.resolve()
+                msg = response.text
 
             # Add assistant's response to chat history
             st.session_state.messages.append({"role": "assistant", "content": msg})
