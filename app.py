@@ -303,7 +303,7 @@ else:
 
             # Generate a response from the model
             response = model.generate_content(
-                prompt, stream=True, temperature=0.2
+                prompt, stream=True
             )
             response.resolve()
             msg = response.text
