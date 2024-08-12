@@ -77,7 +77,7 @@ def format_timestamp(timestamp):
 
 # Display the chat history with visual enhancements and timestamps
 for msg in st.session_state.messages:
-    timestamp = datetime.now()
+    timestamp = datetime.now()  # Get the timestamp here
     if msg["role"] == "assistant":
         with st.chat_message(msg["role"], avatar="🤖"):
             st.markdown(
