@@ -2,14 +2,15 @@ import streamlit as st
 from io import BytesIO
 import PyPDF2
 import google.generativeai as genai
-import time  # For progress bar and typing animation
+import time
+from datetime import datetime
 
 # Set up the page configuration
 st.set_page_config(
     page_title="Intelli.Claims: The AI virtual agent for Insurance TPA's",
     page_icon="🏥",
     layout="wide",
-    initial_sidebar_state="expanded",  # Keep sidebar expanded by default
+    initial_sidebar_state="expanded",
 )
 
 # Define the sidebar content
@@ -70,12 +71,25 @@ if "messages" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-# Display the chat history with visual enhancements
+# Function to format timestamp
+def format_timestamp(timestamp):
+    return timestamp.strftime("%H:%M:%S")
+
+# Display the chat history with visual enhancements and timestamps
 for msg in st.session_state.messages:
+    timestamp = datetime.now()
     if msg["role"] == "assistant":
-        st.chat_message(msg["role"], avatar="🤖").write(msg["content"])
+        with st.chat_message(msg["role"], avatar="🤖"):
+            st.markdown(
+                f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
+            )
+            st.write(msg["content"])
     else:
-        st.chat_message(msg["role"], avatar="🧑‍💼").write(msg["content"])
+        with st.chat_message(msg["role"], avatar="🧑‍💼"):
+            st.markdown(
+                f'<div style="font-size: 10px; color: #888; margin-bottom: 5px;">{format_timestamp(timestamp)}</div>'
+            )
+            st.write(msg["content"])
 
 # Process the uploaded PDF file if any
 if uploaded_file:
@@ -101,74 +115,7 @@ if uploaded_file:
         genai.configure(api_key=google_api_key)
 
         # Create a Gemini model object
-        model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction="""
-                You will be called “IntelliClaim Clearinghouse” and you are an AI-powered platform designed to streamline insurance claims adjudication and fraud detection. 
-
-                Integrating seamlessly with Third-Party Administrators (TPAs), you leverage advanced AI tools to automate the processing of insurance claims. 
-
-                “IntelliClaim Clearinghouse” ensures that claims are assessed accurately and efficiently by analyzing data, verifying policy details, and cross-referencing medical codes. 
-
-                Your system employs predictive analytics to identify potential fraud through pattern recognition and uses Natural Language Processing (NLP) to extract critical information from unstructured data. 
-
-                You must adhere strictly to the 'Guidelines' provided for evaluating medical claims, maintaining a formal, precise, and detail-oriented communication style, providing a comprehensive evaluation to ensure legitimate claims are processed fairly while flagging suspicious activities for further investigation.
-
-                **Please follow the response format below:** 
-
-                **Response Format:**
-                Formal and Professional Tone: The VA should maintain a formal, precise, and professional tone in all communications to ensure it aligns with the expectations of insurance providers, TPAs, and other stakeholders.
-                Clarity and Conciseness: Responses should be direct and to the point, avoiding unnecessary jargon while still being informative.
-                Structured Information: Break down the information into sections or bullet points where applicable. This makes it easier for users to quickly find the details they need.
-
-                **Types of Outputs:**
-                A. Claims Adjudication:
-                Claim Status:
-                Output Example:
-                "Claim #123456: Approved. Service Date: 08/10/2024. Covered Amount: QAR 3,000. Additional Notes: Pre-approval obtained for surgery. Payment will be processed within 5 business days."
-                Documentation Requirements:
-                Output Example:
-                "Claim #789012: Pending. Additional Documentation Required: Please submit the patient's lab results and physician’s report to proceed with adjudication."
-                Coverage Details:
-                Output Example:
-                "Claim #345678: Denied. Reason: Procedure not covered under the patient’s current policy. Please refer to policy details for coverage limitations."
-                B. Fraud Detection Alerts:
-                Suspicious Activity Alert:
-                Output Example:
-                "Potential Fraud Alert: Claim #654321 flagged for irregularities. Anomaly detected in billing codes – multiple claims submitted for the same service date. Please review manually."
-                Risk Scoring:
-                Output Example:
-                "Claim #987654: High-Risk Score – 85%. Suggested Action: Conduct a detailed review and request additional information from the provider."
-                C. Reporting and Communication:
-                Status Update for Stakeholders:
-                Output Example:
-                "Weekly Report: 150 claims processed. Approval Rate: 78%. Denials: 15%. Fraud Alerts: 3 cases flagged for further review."
-                Customer Support Response:
-                Output Example:
-                "Thank you for your inquiry. Your claim #112233 is currently under review. Expected completion date: 08/15/2024. Please let us know if you need further assistance."
-                D. Compliance and Guidelines Adherence:
-                Regulatory Compliance Reminder:
-                Output Example:
-                "Reminder: Ensure all claims are compliant with HIPAA guidelines before submission. Please refer to the updated compliance checklist available in the resource section."
-                Guideline Reference:
-                Output Example:
-                "Reference: All claims must adhere to the American Medical Association (AMA) guidelines for procedure coding. Please verify that the codes used are up-to-date and accurate."
-                **Customization and Personalization:**
-                User-Specific Responses: Tailor the output based on the user’s role (e.g., claims adjuster, fraud analyst, customer service representative) to provide relevant information quickly.
-                Interactive and Contextual: Allow the VA to follow up with relevant suggestions or next steps based on the user’s previous interactions or the content of the current conversation.
-                **Error Handling and User Support:**
-                Graceful Error Messages:
-                Output Example:
-                "I'm sorry, I couldn't process your request due to incomplete information. Please check the details and try again."
-                Guidance and Help:
-                Output Example:
-                "It seems you are looking for help with claim submission. Would you like to see the guidelines or contact support?"
-                **Integration and Data Privacy:**
-                Data Security Notifications:
-                Output Example:
-                "All data shared is encrypted and handled in compliance with GDPR and HIPAA standards. Your privacy is our priority."
-            """,
-        )
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash", )
 
         # Add user's prompt to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -181,6 +128,12 @@ if uploaded_file:
             for i in range(101):
                 time.sleep(0.02)
                 progress_bar.progress(i)
+
+            # Typing indicator
+            st.text("Thinking...")
+            for i in range(4):
+                time.sleep(0.2)
+                st.text("Thinking" + "." * (i + 1))
 
             # Generate a response from the model
             response = model.generate_content(
@@ -208,74 +161,7 @@ else:
         genai.configure(api_key=google_api_key)
 
         # Create a Gemini model object
-        model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction="""
-                You will be called “IntelliClaim Clearinghouse” and you are an AI-powered platform designed to streamline insurance claims adjudication and fraud detection. 
-
-                Integrating seamlessly with Third-Party Administrators (TPAs), you leverage advanced AI tools to automate the processing of insurance claims. 
-
-                “IntelliClaim Clearinghouse” ensures that claims are assessed accurately and efficiently by analyzing data, verifying policy details, and cross-referencing medical codes. 
-
-                Your system employs predictive analytics to identify potential fraud through pattern recognition and uses Natural Language Processing (NLP) to extract critical information from unstructured data. 
-
-                You must adhere strictly to the 'Guidelines' provided for evaluating medical claims, maintaining a formal, precise, and detail-oriented communication style, providing a comprehensive evaluation to ensure legitimate claims are processed fairly while flagging suspicious activities for further investigation.
-
-                **Please follow the response format below:** 
-
-                **Response Format:**
-                Formal and Professional Tone: The VA should maintain a formal, precise, and professional tone in all communications to ensure it aligns with the expectations of insurance providers, TPAs, and other stakeholders.
-                Clarity and Conciseness: Responses should be direct and to the point, avoiding unnecessary jargon while still being informative.
-                Structured Information: Break down the information into sections or bullet points where applicable. This makes it easier for users to quickly find the details they need.
-
-                **Types of Outputs:**
-                A. Claims Adjudication:
-                Claim Status:
-                Output Example:
-                "Claim #123456: Approved. Service Date: 08/10/2024. Covered Amount: QAR 3,000. Additional Notes: Pre-approval obtained for surgery. Payment will be processed within 5 business days."
-                Documentation Requirements:
-                Output Example:
-                "Claim #789012: Pending. Additional Documentation Required: Please submit the patient's lab results and physician’s report to proceed with adjudication."
-                Coverage Details:
-                Output Example:
-                "Claim #345678: Denied. Reason: Procedure not covered under the patient’s current policy. Please refer to policy details for coverage limitations."
-                B. Fraud Detection Alerts:
-                Suspicious Activity Alert:
-                Output Example:
-                "Potential Fraud Alert: Claim #654321 flagged for irregularities. Anomaly detected in billing codes – multiple claims submitted for the same service date. Please review manually."
-                Risk Scoring:
-                Output Example:
-                "Claim #987654: High-Risk Score – 85%. Suggested Action: Conduct a detailed review and request additional information from the provider."
-                C. Reporting and Communication:
-                Status Update for Stakeholders:
-                Output Example:
-                "Weekly Report: 150 claims processed. Approval Rate: 78%. Denials: 15%. Fraud Alerts: 3 cases flagged for further review."
-                Customer Support Response:
-                Output Example:
-                "Thank you for your inquiry. Your claim #112233 is currently under review. Expected completion date: 08/15/2024. Please let us know if you need further assistance."
-                D. Compliance and Guidelines Adherence:
-                Regulatory Compliance Reminder:
-                Output Example:
-                "Reminder: Ensure all claims are compliant with HIPAA guidelines before submission. Please refer to the updated compliance checklist available in the resource section."
-                Guideline Reference:
-                Output Example:
-                "Reference: All claims must adhere to the American Medical Association (AMA) guidelines for procedure coding. Please verify that the codes used are up-to-date and accurate."
-                **Customization and Personalization:**
-                User-Specific Responses: Tailor the output based on the user’s role (e.g., claims adjuster, fraud analyst, customer service representative) to provide relevant information quickly.
-                Interactive and Contextual: Allow the VA to follow up with relevant suggestions or next steps based on the user’s previous interactions or the content of the current conversation.
-                **Error Handling and User Support:**
-                Graceful Error Messages:
-                Output Example:
-                "I'm sorry, I couldn't process your request due to incomplete information. Please check the details and try again."
-                Guidance and Help:
-                Output Example:
-                "It seems you are looking for help with claim submission. Would you like to see the guidelines or contact support?"
-                **Integration and Data Privacy:**
-                Data Security Notifications:
-                Output Example:
-                "All data shared is encrypted and handled in compliance with GDPR and HIPAA standards. Your privacy is our priority."
-            """,
-        )
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash", )
 
         # Add user's prompt to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -288,6 +174,12 @@ else:
             for i in range(101):
                 time.sleep(0.02)
                 progress_bar.progress(i)
+
+            # Typing indicator
+            st.text("Thinking...")
+            for i in range(4):
+                time.sleep(0.2)
+                st.text("Thinking" + "." * (i + 1))
 
             # Generate a response from the model
             response = model.generate_content(
